@@ -156,36 +156,7 @@ function initialize() {
   
   
   
- /* var routeCoords = [];
-  var routeIcon = new google.maps.MarkerImage("http://50problems50days.com/img/mapMarkers.png", new google.maps.Size(19,19), new google.maps.Point(0,148), new google.maps.Point(9,9));
-  for (var i=0; i<mapOpts.route.length; i++) {
-			var latLng = new google.maps.LatLng(mapOpts.route[i].lat, mapOpts.route[i].long);
-			createMarker(map, latLng, "route", "route", routeIcon, null, 2, mapOpts.route[i].name, false);
-			routeCoords.push(latLng);
-		}
-		var routePath = new google.maps.Polyline({
-			path: routeCoords,
-			strokeColor: "#e9b0b1",
-			strokeOpacity: 0.95,
-			strokeWeight: 8,
-			zIndex: 1,
-			clickable: false
-		});
-		routePath.setMap(map);
-		
-		//problems
-		if (mapOpts.problems) {
-			for (var i=0; i<mapOpts.problems.length; i++) {
-				var latLng = new google.maps.LatLng(mapOpts.problems[i].marker_lat, mapOpts.problems[i].marker_long);
-				var problemIcon = new google.maps.MarkerImage("/img/problemMarkers.png", new google.maps.Size(54,55), new google.maps.Point(0,(mapOpts.problems[i].day-1)*56), new google.maps.Point(27,27));
-				var problemIconHover = new google.maps.MarkerImage("/img/problemMarkersHover.png", new google.maps.Size(54,55), new google.maps.Point(0,(mapOpts.problems[i].day-1)*56), new google.maps.Point(27,27));
-				var actualLatLng = new google.maps.LatLng(mapOpts.problems[i].lat, mapOpts.problems[i].long);
-				var marker = createMarker(map, latLng, "problem", mapOpts.problems[i].category.toLowerCase(), problemIcon, problemIconHover, 5, null, true, mapOpts.clickable, mapOpts.problems[i].url, true, "Day " + mapOpts.problems[i].day, mapOpts.problems[i].name, 93, 30, actualLatLng, mapOpts.problems.length==1);
-				markers.push(marker);
-			}
-		}
-  
-  */
+
   var dot_marker = {
     url: 'http://50problems50days.com/img/mapMarkers.png',
     // This marker is 20 pixels wide by 32 pixels tall.
@@ -237,8 +208,8 @@ function initialize() {
 */
 
 // To add the marker to the map, call setMap();
-schoolMarker.setMap(map);
-homeMarker.setMap(map);
+ schoolMarker.setMap(map);
+ homeMarker.setMap(map);
 //marker2.setMap(map); 
 
   var styledMapOptions = {
@@ -270,124 +241,59 @@ homeMarker.setMap(map);
 
 function circle(spots,latOri,longOri,r){
 	
-	for(i=0;i<spots;i++)
-	{
-		//alert("");
-		setTimeout(function(){
-			var ex=Math.cos(2*Math.PI/spots*i);
-			var ey=Math.sin(2*Math.PI/spots*i);
-			//alert("");
-			var x=r*ex+latOri;
-			var y=r*ey+longOri;
-			var myCircle=new Array();
-			myCircle[i]=new google.maps.LatLng(x,y);
+	
+		
+		for(i=0;i<spots;i++)
+		{
+			var g = 0;
+			setTimeout(function(){
 			
-			var circle_dot=new Array();
-			circle_dot[i]=new google.maps.Marker({
-				position: myCircle[i],
-				map: map,
-				icon: dot_marker,
-				animation: google.maps.Animation.DROP
+			//for(var i=0;i<spots;i++)
+			//{
+				var ex=Math.cos(2*Math.PI/spots*g);
+				var ey=Math.sin(2*Math.PI/spots*g);
+		
+				var x=r*ex+latOri;
+				var y=r*ey+longOri;
+				var myCircle=new Array();
+				myCircle[g]=new google.maps.LatLng(x,y);
+		
+				var circle_dot=new Array();
+				circle_dot[g]=new google.maps.Marker({
+					position: myCircle[g],
+					map: map,
+					icon: dot_marker,
+					animation: google.maps.Animation.DROP
 	  
-			})
-			//circle_dot[i].setMap(map);
+			});
+			g++;
+			//};
+			
+  
+		//circle_dot[i].setMap(map);
+			
 			
 		
-		},i*2000)
-		
+		},i*500)
+		}
   
-		
-		
-	}
-
-}	  
+	}	  
 circle(5,25.085406,121.561501,0.01);
-circle(3,25.085406,121.561501,0.03);
+circle(10,25.085406,121.561501,0.03);
 //circle(10,20,25.085406,121.561501,0.05);
 //setTimeout(function(){
 //circle(5,20,25.085406,121.561501,0.01);
 //circle(3,10,25.085406,121.561501,0.03);
 //circle(10,20,25.085406,121.561501,0.05);
 // },4000);
-/*for(i=1;i<=5;i++)
-  {
-	  var ey=Math.sin(Math.PI/5*i);
-      var ex=Math.cos(Math.PI/5*i);
-      var r=0.01;
-      var x=r*ex+25.085406;
-      var y=r*ey+121.561501;
-	  var myCircle=new Array();
-      myCircle[i]=new google.maps.LatLng(x,y);
-      
-	  var circle_dot=new Array();
-	  circle_dot[i]=new google.maps.Marker({
-      position:myCircle[i],
-      map: map,
-      icon: dot_marker
-	  
-      });
-  
-	circle_dot[i].setMap(map);
-	
-    
-  
-  }
-  
-  for(i=1;i<=5;i++)
-  {
-	  var ey=Math.sin(Math.PI/5*i);
-      var ex=Math.cos(Math.PI/5*i);
-      var r=0.02;
-      var x=r*ex+25.085406;
-      var y=r*ey+121.561501;
-	  var myCircle=new Array();
-      myCircle[i]=new google.maps.LatLng(x,y);
-      
-	  var circle_dot=new Array();
-	  circle_dot[i]=new google.maps.Marker({
-      position:myCircle[i],
-      map: map,
-      icon: dot_marker
-	  
-      });
-  
-	circle_dot[i].setMap(map);
-	
-    
-  
-  }
-  */
+
 	
 	
     
   
 	
   
-/* for(i=1;i<=5;i++)
-  {
-	  var ey=Math.sin(Math.PI/5*i);
-      var ex=Math.cos(Math.PI/5*i);
-      var r=0.01;
-      var x=r*ex+24.997338;
-      var y=r*ey+121.578226;
-	  var myCircle=new Array();
-      myCircle[i]=new google.maps.LatLng(x,y);
-      
-	  var circle_dot=new Array();
-	  circle_dot[i]=new google.maps.Marker({
-      position:myCircle[i],
-      map: map,
-      icon: dot_marker
-	  
-      });
-  
-	circle_dot[i].setMap(map);
-	
-    
-  
-  }
-  */
- 
+
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
