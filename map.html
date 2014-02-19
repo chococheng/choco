@@ -1,0 +1,400 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>Complex styled maps</title>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+
+var map ;
+var chicago = new google.maps.LatLng(41.850033, -87.650052);
+
+function circle() {
+	
+	var r = 10.0;  // 半径
+    var a = 30.0;  // 角度
+    var x = r * Math.cos(a / 180 * Math.PI);  // X坐标
+    var y = r * Math.sin(a / 180 * Math.PI);  // Y坐标
+	
+};
+
+
+function initialize() {
+
+  var roadAtlasStyles = [
+    {
+		                    featureType: "poi.park",
+		                    stylers: [
+		                      { hue: "#00d4ff" },
+		                      { visibility: "simplified" },
+		                      { lightness: 22 }
+		                    ]
+		                  },{
+		                    featureType: "administrative.country",
+		                    stylers: [
+		                      { visibility: "simplified" }
+		                    ]
+		                  },{
+		                    featureType: "administrative.province",
+		                    stylers: [
+		                      { visibility: "simplified" }
+		                    ]
+		                  },{
+		                    featureType: "administrative.locality",
+		                    stylers: [
+		                      { visibility: "off" }
+		                    ]
+		                  },{
+		                    featureType: "water",
+		                    stylers: [
+		                      { saturation: 43 },
+		                      { hue: "#00e5ff" },
+		                      { lightness: 84 }
+		                    ]
+		                  },{
+		                  },{
+		                    featureType: "landscape",
+		                    elementType: "geometry",
+		                    stylers: [
+		                      { hue: "#00d4ff" },
+		                      { lightness: -2 },
+		                      { saturation: 36 }
+		                    ]
+		                  },{
+		                    featureType: "road",
+		                    stylers: [
+		                      { hue: "#00c3ff" },
+		                      { lightness: 34 },
+		                      { saturation: -41 }
+		                    ]
+		                  },{
+		                    featureType: "administrative.country",
+		                    stylers: [
+		                      { hue: "#00aaff" },
+		                      { saturation: 18 },
+		                      { lightness: 30 }
+		                    ]
+		                  },{
+		                    featureType: "poi.attraction",
+		                    stylers: [
+		                      { hue: "#00bbff" }
+		                    ]
+		                  },{
+		                    featureType: "administrative.province",
+		                    stylers: [
+		                      { visibility: "off" }
+		                    ]
+		                  },{
+		                    featureType: "road",
+		                    elementType: "labels",
+		                    stylers: [
+		                      { visibility: "off" }
+		                    ]
+		                  },{
+		                    featureType: "road",
+		                    elementType: "geometry",
+		                    stylers: [
+		                      { visibility: "simplified" }
+		                    ]
+		                  },{
+		                    featureType: "transit.station.airport",
+		                    stylers: [
+		                      { hue: "#00c3ff" },
+		                      { saturation: 31 },
+		                      { lightness: 39 }
+		                    ]
+		                  },{
+		                    featureType: "poi",
+		                    stylers: [
+		                      { hue: "#00bbff" },
+		                      { saturation: 9 },
+		                      { visibility: "on" },
+		                      { lightness: 55 }
+		                    ]
+		                  },{
+		                    featureType: "landscape.man_made",
+		                    stylers: [
+		                      { lightness: 32 }
+		                    ]
+		                  },{
+		                    featureType: "road",
+		                    stylers: [
+		                      { lightness: 13 }
+		                    ]
+		                  },{
+		                    featureType: "transit.line",
+		                    stylers: [
+		                      { visibility: "off" }
+		                    ]
+		                  },{
+		                    featureType: "transit.station",
+		                    stylers: [
+		                      { visibility: "off" }
+		                    ]
+		                  },{
+		                    featureType: "administrative.neighborhood",
+		                    stylers: [
+		                      { saturation: 17 },
+		                      { lightness: 26 },
+		                      { hue: "#00b2ff" }
+		                    ]
+		                  },{
+		                    featureType: "landscape.natural",
+		                    elementType: "labels",
+		                    stylers: [
+		                      { visibility: "off" }
+		                    ]
+		                  }
+						  
+  ];
+  
+  
+  
+ /* var routeCoords = [];
+  var routeIcon = new google.maps.MarkerImage("http://50problems50days.com/img/mapMarkers.png", new google.maps.Size(19,19), new google.maps.Point(0,148), new google.maps.Point(9,9));
+  for (var i=0; i<mapOpts.route.length; i++) {
+			var latLng = new google.maps.LatLng(mapOpts.route[i].lat, mapOpts.route[i].long);
+			createMarker(map, latLng, "route", "route", routeIcon, null, 2, mapOpts.route[i].name, false);
+			routeCoords.push(latLng);
+		}
+		var routePath = new google.maps.Polyline({
+			path: routeCoords,
+			strokeColor: "#e9b0b1",
+			strokeOpacity: 0.95,
+			strokeWeight: 8,
+			zIndex: 1,
+			clickable: false
+		});
+		routePath.setMap(map);
+		
+		//problems
+		if (mapOpts.problems) {
+			for (var i=0; i<mapOpts.problems.length; i++) {
+				var latLng = new google.maps.LatLng(mapOpts.problems[i].marker_lat, mapOpts.problems[i].marker_long);
+				var problemIcon = new google.maps.MarkerImage("/img/problemMarkers.png", new google.maps.Size(54,55), new google.maps.Point(0,(mapOpts.problems[i].day-1)*56), new google.maps.Point(27,27));
+				var problemIconHover = new google.maps.MarkerImage("/img/problemMarkersHover.png", new google.maps.Size(54,55), new google.maps.Point(0,(mapOpts.problems[i].day-1)*56), new google.maps.Point(27,27));
+				var actualLatLng = new google.maps.LatLng(mapOpts.problems[i].lat, mapOpts.problems[i].long);
+				var marker = createMarker(map, latLng, "problem", mapOpts.problems[i].category.toLowerCase(), problemIcon, problemIconHover, 5, null, true, mapOpts.clickable, mapOpts.problems[i].url, true, "Day " + mapOpts.problems[i].day, mapOpts.problems[i].name, 93, 30, actualLatLng, mapOpts.problems.length==1);
+				markers.push(marker);
+			}
+		}
+  
+  */
+  var dot_marker = {
+    url: 'http://50problems50days.com/img/mapMarkers.png',
+    // This marker is 20 pixels wide by 32 pixels tall.
+    size: new google.maps.Size(19,19),
+    // The origin for this image is 0,0.
+    origin: new google.maps.Point(0,148),
+    // The anchor for this image is the base of the flagpole at 0,32.
+    anchor: new google.maps.Point(9,9)
+  };
+  
+  
+  //var image = 'http://50problems50days.com/img/mapMarkers.png';
+  var myLatlng = new google.maps.LatLng(25.085406,121.561501);
+  var myHome=new google.maps.LatLng(24.997338,121.578226);
+  
+  var mapOptions = {
+    zoom: 12,
+    center: myLatlng,
+   
+    mapTypeControlOptions: {
+      mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'usroadatlas']
+    }
+	
+  };
+  
+   var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+  var schoolMarker = new google.maps.Marker({
+      position: myLatlng,
+      map: map,
+      icon: dot_marker
+  });
+   var homeMarker = new google.maps.Marker({
+      position: myHome,
+      map: map,
+      icon: dot_marker
+  });
+
+ 
+	  
+/*  var marker2 = new google.maps.Marker({
+    position: myHome,
+    title:"My Home!"
+});
+ var marker = new google.maps.Marker({
+    position: myLatlng,
+    title:"chenggi!"
+});
+*/
+
+// To add the marker to the map, call setMap();
+schoolMarker.setMap(map);
+homeMarker.setMap(map);
+//marker2.setMap(map); 
+
+  var styledMapOptions = {
+    name: 'US Road Atlas'
+  };
+
+  var usRoadMapType = new google.maps.StyledMapType(
+      roadAtlasStyles, styledMapOptions);
+
+  map.mapTypes.set('usroadatlas', usRoadMapType);
+  map.setMapTypeId('usroadatlas');
+  
+    var flightPlanCoordinates = [
+    new google.maps.LatLng(25.085406,121.561501),
+    new google.maps.LatLng(24.997338,121.578226),
+    
+  ];
+  var flightPath = new google.maps.Polyline({
+    path: flightPlanCoordinates,
+    geodesic: true,
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 2
+  });
+
+  flightPath.setMap(map);
+  
+  
+
+function circle(spots,latOri,longOri,r){
+	
+	for(i=0;i<spots;i++)
+	{
+		//alert("");
+		setTimeout(function(){
+			var ex=Math.cos(2*Math.PI/spots*i);
+			var ey=Math.sin(2*Math.PI/spots*i);
+			//alert("");
+			var x=r*ex+latOri;
+			var y=r*ey+longOri;
+			var myCircle=new Array();
+			myCircle[i]=new google.maps.LatLng(x,y);
+			
+			var circle_dot=new Array();
+			circle_dot[i]=new google.maps.Marker({
+				position: myCircle[i],
+				map: map,
+				icon: dot_marker,
+				animation: google.maps.Animation.DROP
+	  
+			})
+			//circle_dot[i].setMap(map);
+			
+		
+		},i*2000)
+		
+  
+		
+		
+	}
+
+}	  
+circle(5,25.085406,121.561501,0.01);
+circle(3,25.085406,121.561501,0.03);
+//circle(10,20,25.085406,121.561501,0.05);
+//setTimeout(function(){
+//circle(5,20,25.085406,121.561501,0.01);
+//circle(3,10,25.085406,121.561501,0.03);
+//circle(10,20,25.085406,121.561501,0.05);
+// },4000);
+/*for(i=1;i<=5;i++)
+  {
+	  var ey=Math.sin(Math.PI/5*i);
+      var ex=Math.cos(Math.PI/5*i);
+      var r=0.01;
+      var x=r*ex+25.085406;
+      var y=r*ey+121.561501;
+	  var myCircle=new Array();
+      myCircle[i]=new google.maps.LatLng(x,y);
+      
+	  var circle_dot=new Array();
+	  circle_dot[i]=new google.maps.Marker({
+      position:myCircle[i],
+      map: map,
+      icon: dot_marker
+	  
+      });
+  
+	circle_dot[i].setMap(map);
+	
+    
+  
+  }
+  
+  for(i=1;i<=5;i++)
+  {
+	  var ey=Math.sin(Math.PI/5*i);
+      var ex=Math.cos(Math.PI/5*i);
+      var r=0.02;
+      var x=r*ex+25.085406;
+      var y=r*ey+121.561501;
+	  var myCircle=new Array();
+      myCircle[i]=new google.maps.LatLng(x,y);
+      
+	  var circle_dot=new Array();
+	  circle_dot[i]=new google.maps.Marker({
+      position:myCircle[i],
+      map: map,
+      icon: dot_marker
+	  
+      });
+  
+	circle_dot[i].setMap(map);
+	
+    
+  
+  }
+  */
+	
+	
+    
+  
+	
+  
+/* for(i=1;i<=5;i++)
+  {
+	  var ey=Math.sin(Math.PI/5*i);
+      var ex=Math.cos(Math.PI/5*i);
+      var r=0.01;
+      var x=r*ex+24.997338;
+      var y=r*ey+121.578226;
+	  var myCircle=new Array();
+      myCircle[i]=new google.maps.LatLng(x,y);
+      
+	  var circle_dot=new Array();
+	  circle_dot[i]=new google.maps.Marker({
+      position:myCircle[i],
+      map: map,
+      icon: dot_marker
+	  
+      });
+  
+	circle_dot[i].setMap(map);
+	
+    
+  
+  }
+  */
+ 
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
